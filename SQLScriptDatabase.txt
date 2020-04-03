@@ -1,0 +1,13 @@
+create database ToDoDB;
+go
+use ToDoDb
+go
+create table task (
+Id int identity(1,1) primary key,
+Title varchar(50) not null,
+Description varchar(100) null,
+ExpireDate datetime not null,
+PercentComplete varchar(10),
+Status varchar(10) null,
+)
+go
