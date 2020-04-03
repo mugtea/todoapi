@@ -4,6 +4,8 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Web.Http;
 using WebApplication1.Controllers;
 using WebApplication1.Models;
 using WebApplication1.Repository;
@@ -12,52 +14,55 @@ namespace NUnitTestProject1
 {
     public class Tests
     {
-        //create dummmy data in memory data
-        IQueryable<Task> listTasks = new List<Task>
-            {
-                new Task
-                {
-                    Id = 1,
-                    Title = "Task1",
-                    Description = "Desc1",
-                    ExpireDate = DateTime.Now,
-                    PercentComplete = "0",
-                    Status = "Pending"
-                },
-                new Task
-                {
-                    Id = 2,
-                    Title = "Task2",
-                    Description = "Desc2",
-                    ExpireDate = DateTime.Now.AddDays(1),
-                    PercentComplete = "0",
-                    Status = "Pending"
-                }
-            }.AsQueryable();
+        TaskController controller;
 
+        HttpConfiguration configuration;
+        HttpRequestMessage request;
 
-        [SetUp]
-        public void Setup()
+        public Tests()
         {
+            controller = new TaskController();
+            configuration = new HttpConfiguration();
+            request = new HttpRequestMessage();
         }
 
-        //[TestMethod]
-        //public void CreateBookTest()
-        //{
-        //    var mockSet = new Mock<DbSet<Task>>();
-
-        //    var mockContext = new Mock<ToDoDbContext>();
-        //    mockContext.Setup(m => m.Task).Returns(mockSet.Object);
-
-        //    // Act - Add the book
-        //    var repository = new TaskRepository(mockContext.Object);
-        //    repository.AddBook("Macbeth", "William Shakespeare");
-
-        //    // Assert
-        //    // These two lines of code verifies that a book was added once and
-        //    // we saved our changes once.
-        //    mockSet.Verify(m => m.Add(It.IsAny<Book>()), Times.Once);
-        //    mockContext.Verify(m => m.SaveChanges(), Times.Once);
-        //}
+        [Test]
+        public void Add()
+        {
+            // Arrange
+            var data = new Task()
+            {
+                Title = "TaskDummy",
+                Description = "TaskDescription",
+                ExpireDate = DateTime.Now,
+                PercentComplete = "0",
+                Status = "Pending"
+            };
+            var results = controller.Add(data);
+            Assert.AreEqual("Successfully add data", results);
+        }
+        [Test]
+        public void Update()
+        {
+            // Arrange
+            var data = new Task()
+            {
+                Id = 4,
+                Title = "TaskDummy",
+                Description = "TaskDescription",
+                ExpireDate = DateTime.Now,
+                PercentComplete = "0",
+                Status = "Pending"
+            };
+            var results = controller.Update(data);
+            Assert.AreEqual("Successfully update data", results);
+        }
+        [Test]
+        public void Delete()
+        {
+            // Arrange
+            var results = controller.Delete(5);
+            Assert.AreEqual("Successfully remove data", results);
+        }
     }
 }
